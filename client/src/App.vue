@@ -2,11 +2,13 @@
 import { ref } from "vue";
 import "./assets/css/index.css";
 import "./assets/css/animate.css";
-import { useAppProvider, IAppProvider } from "@/providers/app";
+import { useAppProvider, IAppProvider, TLangs } from "@/providers/app";
 import APIConsumer from "@/composables/useAPIConsumer";
 import { useI18n } from "vue-i18n";
 import { Flag } from "@/app.organizer";
 import { onKeyStroke } from "@vueuse/core";
+import useEventSource from "@/composables/useEventSource";
+
 
 type Errors = {
   [key: string]: string[];
@@ -21,6 +23,14 @@ const number = ref<number>();
 const errors = ref<Errors>({} as Errors);
 const result = ref<string | null>(null);
 const isFetching = ref<boolean>(false);
+
+const EventSource = useEventSource('roman','/web/roman/event-source?id='+App.uuid.value)
+
+EventSource.on('result', (data) => {
+  result.value = data;
+  number.value = undefined;
+  isFetching.value = false;
+})
 
 const composeErrors = (Apierrors: Errors) => {
   for (const [key, value] of Object.entries(Apierrors)) {
@@ -38,25 +48,21 @@ const submit = async () => {
     errors.value["number"] = [];
     errors.value["number"].push(print("enter_a_number_between", [0, 100]));
     errors.value = errors.value;
-    console.log('retunr error');
     return;
   }
   isFetching.value = true;
-
-  const response = await APIConsumer(
+ 
+  APIConsumer(
     "post",
     "/web/roman/convert",
     number.value
   );
-
-  number.value = undefined;
-  if (response && !response.errors.length) {
-    result.value = response.data;
-  } else {
-    if (response) composeErrors(response.errors);
-  }
-  isFetching.value = false;
 };
+
+const setLanguage = (lang: string) => {
+  App.setLanguage(lang as TLangs);
+  locale.value = lang;
+}
 
 const resetErrors = () => {
   errors.value = {};
@@ -67,6 +73,7 @@ onKeyStroke(["Enter"], (e) => {
   e.preventDefault();
   submit();
 });
+
 </script>
 
 <template>
@@ -120,12 +127,12 @@ onKeyStroke(["Enter"], (e) => {
             <Flag
               type="fr"
               :isActive="App.lang.value === 'fr'"
-              @click="() => App.setLanguage('fr')"
+              @click="() => setLanguage('fr')"
             />
             <Flag
               type="en"
               :isActive="App.lang.value === 'en'"
-              @click="() => App.setLanguage('en')"
+              @click="() => setLanguage('en')"
             />
           </div>
         </div>

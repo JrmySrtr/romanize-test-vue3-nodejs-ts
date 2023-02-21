@@ -8,9 +8,10 @@ export default function (req: Request, res: Response, next: NextFunction) {
     }
 
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
+    res.setHeader('Access-Control-Expose-Headers', 'x-events')
     res.setHeader(
         'Access-Control-Allow-Headers',
-        'x-events, X-Requested-With,content-type,authorization,bearer'
+        'x-events,X-Requested-With,content-type,authorization,bearer'
     )
     res.setHeader('Access-Control-Allow-Credentials', 'true')
 

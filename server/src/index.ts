@@ -23,7 +23,7 @@ server.use((req, res, next) => {
     next()
 })
 server.use((req, res, next) => {
-    console.log(req.url)
+    console.log('Trying request on path > ' + req.url)
     next()
 })
 server.use(middlewarePrepareHeader)

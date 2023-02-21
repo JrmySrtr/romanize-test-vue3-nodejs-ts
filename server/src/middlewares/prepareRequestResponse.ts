@@ -16,6 +16,7 @@ export default async function (req: ICustomExpressRequest, res: ICustomExpressRe
                 index = 'api'
             }
             if (!this.object.errors[index]) this.object.errors[index] = []
+
             this.object.errors[index].push(msg)
         },
         getErrors(): object {

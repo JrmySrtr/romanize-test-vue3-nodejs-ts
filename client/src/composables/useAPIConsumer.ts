@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ref } from "vue";
 import { API_URL } from "@/app.config"
+import { useAppProvider } from '@/providers/app';
 
 type Response = {
   status: number,
@@ -11,6 +12,7 @@ type Response = {
 }
 
 const useAPIConsumer = async (method: string, path: string, data: any):Promise<Response>  => {
+
       let fetcher: any = null;
 
       switch (method) {
@@ -20,7 +22,13 @@ const useAPIConsumer = async (method: string, path: string, data: any):Promise<R
           fetcher = axios.post;
       }
       
-      const response = await fetcher(`${API_URL}${path}`, { data: data })
+      const config = {
+        headers: {
+          ...axios.defaults.headers,
+          'x-events': useAppProvider().uuid.value,
+        }
+      }
+      const response = await fetcher(`${API_URL}${path}`, { data: data }, config)
 
       if (response.status === 200 && response.data.status) {
         return response.data

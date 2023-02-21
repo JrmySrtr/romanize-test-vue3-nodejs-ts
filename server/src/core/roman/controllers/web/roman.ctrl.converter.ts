@@ -1,8 +1,11 @@
 import { ICustomExpressRequest, ICustomExpressResponse } from '../../../../types/router.types'
+import { EventSourceManager } from '../../../../services/EventSource';
 
 /*
  * Public Controller
  */
+const EventSource = new EventSourceManager('roman');
+
 export default async function (req: ICustomExpressRequest, res: ICustomExpressResponse): Promise<void> {
     try {
         const { body }: any = req
@@ -11,7 +14,8 @@ export default async function (req: ICustomExpressRequest, res: ICustomExpressRe
             res.error('number', 'enter_a_number')
             return
         }
-        res.respond(200, romanize(inputNumber))
+        res.respond(200, true);
+        EventSource.emit(req, ['result'], romanize(inputNumber));
         return
     } catch (e) {
         res.status(500).send(e)
