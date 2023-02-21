@@ -1,0 +1,24 @@
+{
+    "ts-node": {
+        "transpileOnly": true
+    },
+    "compilerOptions": {
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "target": "ESNext",
+        "skipLibCheck": true,
+        "noImplicitAny": true,
+        "incremental": true,
+        "moduleResolution": "node",
+        "allowJs": true,
+        "sourceMap": true,
+        "outDir": "dist",
+        "baseUrl": ".",
+        "paths": {
+            "*": ["node_modules/*"]
+        }
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "build", "dist", "src/**/*.js", "src/**/*.jsx", "../@shared/*.js"]
+}

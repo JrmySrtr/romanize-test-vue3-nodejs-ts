@@ -1,0 +1,15 @@
+{
+  "name": "numeroman-vue3-node-ts",
+  "version": "0.0.1",
+  "description": "numeroman test ",
+  "main": "index.js",
+  "scripts": {
+    "install-all": "concurrently 'cd ./client && npm install' 'cd ./server && npm install'",
+    "start": "concurrently 'cd ./client && npm run dev' 'cd ./server && npm run dev'"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
